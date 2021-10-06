@@ -76,7 +76,7 @@ function displayBoard(){
             space.classList.add("col" + j);
             if(i != 0 && j != 0 && i != (length - 1) && j != (width - 1)){
                 space.onmousedown = handleClick;
-
+                space.classList.add("untouched");
             } else {
                 gameBoard[i][j][1] = true;
             }         
@@ -102,11 +102,13 @@ function handleClick(e){
     } else if(gameBoard[i][j][0]){
         this.style.color = colors[9];
         this.innerText = "💣"; 
+        this.classList.remove("untouched");
         loseModal.style.display = "block";
     } else {
         spacesRemaining--;
         this.style.color = colors[gameBoard[i][j][2]];
         this.innerText = gameBoard[i][j][2];
+        this.classList.remove("untouched");
     }
     if(spacesRemaining <= 0) {
         winModal.style.display = "block";
@@ -117,7 +119,8 @@ function deathRowReveal(x,y){
     spacesRemaining--;
     var element = document.getElementById(x + "," + y);
     gameBoard[y][x][1] = true;
-    element.innerText = gameBoard[y][x][2];
+    //element.innerText = gameBoard[y][x][2];
+    element.classList.remove("untouched");
 
     for(let k = -1; k < 2; k++){
         for(let l = -1; l < 2; l++){
@@ -128,6 +131,7 @@ function deathRowReveal(x,y){
             } else if(!gameBoard[y+k][x+l][1]){
                 spacesRemaining--;
                 neighbor.style.color = colors[gameBoard[y+k][x+l][2]];
+                neighbor.classList.remove("untouched");
                 neighbor.innerText = gameBoard[y+k][x+l][2];
                 gameBoard[y+k][x+l][1] = true;
             }
@@ -136,6 +140,11 @@ function deathRowReveal(x,y){
 }
 
 function resetGame(){
+    if(spacesRemaining <= 0){
+        winModal.style.display = "none";
+    } else {
+        loseModal.style.display = "none";
+    }
     while (gridElement.firstChild) {
         gridElement.removeChild(gridElement.firstChild);
     }
@@ -143,6 +152,7 @@ function resetGame(){
     gameBoard = [];
     numOfFlags = 0;
     timer = 0;
+    spacesRemaining = (length - 2)*(width - 2) - maxMines;
     clearInterval(timerInterval);
     timerInterval = null;
     timerElement.innerText = "000";
@@ -150,12 +160,6 @@ function resetGame(){
     populateBoard();
     countNeighbors();
     displayBoard();
-    if(spacesRemaining <= 0){
-        winModal.style.display = "none";
-    } else {
-        loseModal.style.display = "none";
-    }
-    
 }
 
 function handleRightClick(x,y){
@@ -179,6 +183,7 @@ function handleRightClick(x,y){
 function incrementTimer(){
     timer++;
     timer = Math.min(timer, 999);
+    timerElement.innerText = timer;
     if(timer < 100){
         timerElement.innerText = "0" + timer;
     }
