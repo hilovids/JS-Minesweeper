@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+</head>
+
+<body>
+    <div id="play area">
+        <h1>Waiting For Nick Minesweeper</h1>
+        <div class="scoreboard">
+                <h2 class="scoreboardChild">Time: </h2>
+                <h2 class="scoreboardChild" id="timer">000</h2>
+                <h2 class="scoreboardChild">Flags: </h2>
+                <h2 class="scoreboardChild" id="flags">000</h2>
+        </div>
+
+        <div id="loseModal" class="modal">
+
+            <!-- Modal content -->
+            <div class="modal-content">
+                <p>You lose! Play again?</p>
+                <button id="submit" onclick="resetGame()">Enter</button>
+            </div>
+
+        </div>
+        <div id="winModal" class="modal">
+
+            <!-- Modal content -->
+            <div class="modal-content">
+                <p>You win! Play again?</p>
+                <button id="submit" onclick="resetGame()">Enter</button>
+            </div>
+
+        </div>
+        <div id="grid"></div>
+    </div>
+    <script src="minesweeper.js"></script>
+    <link rel="stylesheet" href="index.css">
+</body>
+
+</html>
