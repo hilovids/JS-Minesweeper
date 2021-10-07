@@ -96,7 +96,7 @@ function handleClick(e){
         handleRightClick(j,i);
         return;
     }
-    console.log(this.id);
+    //console.log(this.id);
     if(gameBoard[i][j][2] == 0){
         deathRowReveal(j,i);
     } else if(gameBoard[i][j][0]){
@@ -105,19 +105,27 @@ function handleClick(e){
         this.classList.remove("untouched");
         loseModal.style.display = "block";
     } else {
-        spacesRemaining--;
+        if(!gameBoard[i][j][1]){
+            spacesRemaining--;
+        }
         this.style.color = colors[gameBoard[i][j][2]];
         this.innerText = gameBoard[i][j][2];
         this.classList.remove("untouched");
+        gameBoard[i][j][1] = true;
     }
     if(spacesRemaining <= 0) {
         winModal.style.display = "block";
     }
+
+    //console.log(spacesRemaining);
 }
 
 function deathRowReveal(x,y){
-    spacesRemaining--;
+    
     var element = document.getElementById(x + "," + y);
+    if(!gameBoard[y][x][1]){
+        spacesRemaining--;
+    }
     gameBoard[y][x][1] = true;
     //element.innerText = gameBoard[y][x][2];
     element.classList.remove("untouched");
@@ -125,7 +133,6 @@ function deathRowReveal(x,y){
     for(let k = -1; k < 2; k++){
         for(let l = -1; l < 2; l++){
             var neighbor = document.getElementById((x+l) + "," + (y+k));
-            
             if(!gameBoard[y + k][x + l][1] && gameBoard[y + k][x + l][2] == 0){
                 deathRowReveal(x+l,y+k);
             } else if(!gameBoard[y+k][x+l][1]){
@@ -137,6 +144,8 @@ function deathRowReveal(x,y){
             }
         }
     }
+
+    //console.log("I revealed");
 }
 
 function resetGame(){
@@ -164,7 +173,7 @@ function resetGame(){
 
 function handleRightClick(x,y){
     var element = document.getElementById(x + "," + y);
-    if(element.innerText == ""){
+    if(element.innerText == "" && element.classList.contains("untouched")){
         element.innerText = "🚩";
         numOfFlags++;
     } else if (element.innerText == "🚩"){
